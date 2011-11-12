@@ -1,43 +1,45 @@
-target metric: OPENSCAD:=$(shell which openscad) -D variant=0 -D linear=0
-target metric: TARGET=./metric-prusa
-target metric-lm8uu: TARGET=./metric-prusa-linear
-target metric-lm8uu: OPENSCAD:=$(shell which openscad) -D variant=0 -D linear=1
-target sae: TARGET=./sae-prusa
-target sae: OPENSCAD:=$(shell which openscad) -D variant=1 -D linear=0
-target sae-lm8uu: TARGET=./sae-prusa-linear
-target sae-lm8uu: OPENSCAD:=$(shell which openscad) -D variant=1 -D linear=1
+SOURCE=./SCADs
+TARGET=./STLs
+OPENSCAD:=openscad -D variant=0 -D linear=1
 
-PARTS= $(TARGET)/x-end-motor.stl $(TARGET)/x-end-idler.stl $(TARGET)/bar-clamp.stl
+# List of the basic file names we need to process
+BASE_FILES:=$(basename $(notdir $(wildcard $(SOURCE)/*.scad)))
+# Remove the ones that shouldn't be made directly
+REMOVE_FILES:=frame-vertex configuration functions metric OpenScadFont sae \
+	thicksheet ybrac-t x-lm8uu-holder
+BASE_FILES:=$(filter-out $(REMOVE_FILES),$(BASE_FILES))
 
-TARGETS=$(PARTS)
-help: 
+# Construct the set of output files to make from the base filenames
+TARGETS:=$(addsuffix .stl,$(addprefix $(TARGET)/,$(BASE_FILES)))
+# and add in the extras that we wouldn't otherwise make
+TARGETS+=$(TARGET)/y-motor-bracket.stl \
+	$(TARGET)/frame-vertex-without-foot.stl \
+	$(TARGET)/frame-vertex-with-foot.stl
+
+parts: $(TARGET) $(TARGETS)
+help:
 	@echo Options:
-	@echo make metric: makes metric parts
-	@echo make metric-lm8uu: makes metric parts
-	@echo make sae: makes metric parts
-	@echo make sae-lm8uu: makes metric parts
+	@echo make: Builds all the parts
 	@echo make clean: deletes the stl directory with the output files
-	@echo adding VARIANT=1 to any of these commands generates SAE parts
-	@echo SAE parts get saved in ./stl-sae, metric parts in ./stl
-metric : parts
-metric-lm8uu : parts
-sae : parts
-sae-lm8uu : parts
-parts : $(TARGET) $(TARGETS)
-$(TARGET) :
+
+$(TARGET):
 	mkdir -p $(TARGET)
-$(TARGET)/%.stl : source/%.scad
-	@echo "Processing $@"
-	$(OPENSCAD) -s $(TARGET)$@ $(subst $(TARGET),.,source$(subst .stl,.scad,$@))
-$(TARGET)/frame-vertex-with-foot.stl: source/frame-vertex.scad
-	$(OPENSCAD) -D basefoot=true -s $@ source/frame-vertex.scad 
-$(TARGET)/frame-vertex-without-foot.stl: source/frame-vertex.scad
-	$(OPENSCAD)  -D basefoot=false -s $@ source/frame-vertex.scad
-$(TARGET)/y-motor-bracket.stl: source/ybrac-t.scad
-	$(OPENSCAD) -s $@ ybrac-t.scad
+
+$(TARGET)/%.stl: $(SOURCE)/%.scad
+	$(OPENSCAD) -o $@ $< 2>/dev/null
+
+$(TARGET)/frame-vertex-with-foot.stl: $(SOURCE)/vertex.scad
+	$(OPENSCAD) -D basefoot=true -o $@ $< 2>/dev/null
+
+$(TARGET)/frame-vertex-without-foot.stl: $(SOURCE)/vertex.scad
+	$(OPENSCAD) -D basefoot=false -o $@ $< 2>/dev/null
+
+$(TARGET)/y-motor-bracket.stl: $(SOURCE)/ybrac-t.scad
+	$(OPENSCAD) -o $@ $< 2>/dev/null
+
 
 #$(PARTS) : $(TARGET)
 #	@echo "Processing $@"
 #	$(OPENSCAD) -s $(TARGET)/$@.stl $@.scad
-clean :
-	rm -rf $(TARGET)
+clean:
+	rm -rf $(TARGET)/*.stl
