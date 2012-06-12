@@ -24,7 +24,7 @@ uu_height = linear_bearing_length;
 
 module z_linear_bearings( luu=false , override_height = -1 )
 {
-	translate( v = [0, 9.5, 0]) rotate( a = [0, 0, 90] )
+	translate( v = [0, 10, 0]) rotate( a = [0, 0, 90] )
 	assign( height = ( override_height > 0 ) ? override_height : luu_version ? luu_height + 4 + 1 : 65 )
 	{
 	
@@ -36,7 +36,7 @@ module z_linear_bearings( luu=false , override_height = -1 )
 				translate( [-5, 0, height / 2] ) cube( [10, 20, height], center = true );
 				
 				//holder for main block in x-end
-				translate( [-5, 0, 15.8 / 2] ) cube( [12, 23, 15.8], center = true );
+				translate( [-5, 0, 15.8 / 2] ) cube( [13, 23, 15.8], center = true );
 				translate( [0, 0, 0]) cylinder( h = height, r = 10, $fn = 60 );
 			}
 
