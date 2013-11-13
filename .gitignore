@@ -1,5 +1,6 @@
 *.gcode
+!*.stl
+*.stl
+
 tvrrug1.0
-source/info.png
-thingdoc
-source/prusa-mendel.tmproj
+tvrrug2.0

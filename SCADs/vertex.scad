@@ -33,10 +33,6 @@ basefoot = false;
 
 vertex( with_foot = basefoot );
 
-//import_stl( "frame-vertex.stl" );
-
-//teardrop();
-
 module teardrop( r = 8, h = 20 )
 {
 	rotate( [-270, 0, 90] )

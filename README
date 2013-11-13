@@ -1,6 +1,6 @@
-TVRRUG Prusa Mendel Round 1
+TVRRUG Prusa Mendel Round 2
 
-These are the files for the TVRRUG Round 1 version of the Prusa Mendel
+These are the files for the TVRRUG Round 2 version of the Prusa Mendel
 
 Please read http://tvrrug.org.uk/tvprusa before attempting to build this.
 
@@ -8,13 +8,13 @@ Imported stuff:
 Frame vertices are based on Viks and Tonokips ones
 Extruder by Wade
 Parametric Involute Bevel and Spur Gears by GregFrost
-Belt pulley is http://www.thingiverse.com/thing:3104 by GilesBathgate
+Belt pulley is http://www.thingiverse.com/thing:11256 by droftarts
 Most of the rest from Josef Prusa
 
 To print:
 
 6x frame-vertex-without-foot or 2x -without-foot and 4x -with-foot
-2x coupling
+4x coupling
 3x endstop-holder
 1x x-carriage
 1x x-end-idler
@@ -23,10 +23,11 @@ To print:
 4x belt-clamp
 8x bar-clamp
 2x rod-clamp
-1x y-motor-bracket
-2x pulley
-1x herringbone-wadebits
-4x SpringSeat
-1x wade
-4x y-lm8uu-holder
-4x bed-spring_4off (in STLs dir)
+2x 9-tooth-pulley-TVRRUG
+1x herringbone-wadebits (11 tooth drive gear and 45 tooth gear)
+4x SpringSeat (extruder spring retainer)
+1x wade (extruder block)
+4x spring
+1x y-idler
+1x ybrac-t
+2x zizolator
